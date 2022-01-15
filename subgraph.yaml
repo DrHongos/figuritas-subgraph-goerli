@@ -1,0 +1,32 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: AlbumsFactory
+    network: goerli
+    source:
+      address: "0x847297F119A8890072b3Fbf85B3dA65Bc9c4384c"
+      abi: AlbumsFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - AlbumClaimed
+        - AlbumCreated
+        - AlbumsProtocolUpgraded
+        - OwnershipTransferred
+      abis:
+        - name: AlbumsFactory
+          file: ./abis/AlbumsFactory.json
+      eventHandlers:
+        - event: AlbumClaimed(address,address,address)
+          handler: handleAlbumClaimed
+        - event: AlbumCreated(address,string,address,uint256,uint256)
+          handler: handleAlbumCreated
+        - event: AlbumsProtocolUpgraded(address)
+          handler: handleAlbumsProtocolUpgraded
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: ./src/mapping.ts

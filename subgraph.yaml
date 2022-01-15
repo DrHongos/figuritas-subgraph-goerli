@@ -1,16 +1,16 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: AlbumsFactory
-    network: goerli
+    network: rinkeby
     source:
       address: "0x847297F119A8890072b3Fbf85B3dA65Bc9c4384c"
       abi: AlbumsFactory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - AlbumClaimed
@@ -29,4 +29,77 @@ dataSources:
           handler: handleAlbumsProtocolUpgraded
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-      file: ./src/mapping.ts
+      file: ./src/AlbumsFactory.ts
+  - kind: ethereum/contract
+    name: TradeCourt
+    network: rinkeby
+    source:
+      address: "0x506a2EB3dB854C55fE5e7eB257e333d3C40585aE"
+      abi: TradeCourt
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - OfferListed
+        - TradeTaken
+        - TradeCancelled
+      abis:
+        - name: TradeCourt
+          file: ./abis/TradeCourt.json
+      eventHandlers:
+        - event: OfferListed(address,address,uint256,address,uint256)
+          handler: handleOfferListed
+        - event: TradeTaken(address,uint256)
+          handler: handleTradeTaken
+        - event: TradeCancelled(uint256)
+          handler: handleTradeCancelled
+      file: ./src/TradeCourt.ts
+templates:
+  - kind: ethereum/contract
+    name: AlbumCollection
+    network: rinkeby
+    source:
+      abi: AlbumCollection
+    mapping:
+      file: ./src/AlbumCollection.ts
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      abis:
+        - name: AlbumCollection
+          file: ./abis/AlbumCollection.json
+      entities:
+        - gainsClaimed
+        - EnvelopeOpen
+        - FigurinesBought
+      eventHandlers:
+        - event: gainsClaimed(uint256)
+          handler: handleGainsClaimed
+        - event: EnvelopeOpen(address,uint256[],uint256[])
+          handler: handleEnvelopeOpen
+        - event: FigurinesBought(address,uint256)
+          handler: handleFigurinesBought
+  - kind: ethereum/contract
+    name: UserAlbum
+    network: rinkeby
+    source:
+      abi: UserAlbum
+    mapping:
+      file: ./src/UserAlbum.ts
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      abis:
+        - name: UserAlbum
+          file: ./abis/UserAlbum.json
+      entities:
+        - FigurineSticked
+        - FigurineUnsticked
+      eventHandlers:
+        - event: FigurineSticked(uint256)
+          handler: handleFigurineSticked
+        - event: FigurineUnsticked(uint256)
+          handler: handleFigurineUnsticked
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred

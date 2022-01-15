@@ -1,0 +1,16 @@
+{
+  "name": "figuritas-goerli",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ drhongos/figuritas-goerli",
+    "create-local": "graph create --node http://localhost:8020/ drhongos/figuritas-goerli",
+    "remove-local": "graph remove --node http://localhost:8020/ drhongos/figuritas-goerli",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 drhongos/figuritas-goerli"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.21.1",
+    "@graphprotocol/graph-ts": "0.20.0"
+  }
+}
